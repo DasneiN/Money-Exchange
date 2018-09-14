@@ -6,23 +6,45 @@ module.exports = function makeExchange(currency) {
     if (currency <= 0) return {};
     if (currency > 10000) return { error: "You are rich, my friend! We don't have so much coins for exchange" };
 
-    let result = {},
-        designations = {
-          H: 50,
-          Q: 25,
-          D: 10,
-          N: 5,
-          P: 1
-        };
+    // let result = {},
+    //     designations = {
+    //       H: 50,
+    //       Q: 25,
+    //       D: 10,
+    //       N: 5,
+    //       P: 1
+    //     };
 
-    for (const key in designations) {
-      if (designations.hasOwnProperty(key)) {
-        const value = designations[key];
-        let n = (currency - currency % value) / value;
+    // for (let key in designations) {
+    //   let value = designations[key];
+
+    //   let n = (currency - currency % value) / value;
+    //   currency = currency - n * value;
+    //   if (n > 0) {
+    //     result[key] = n;
+    //   }
+    // }
+
+    let result = {},
+        designations = new Map([
+      ['H',50],
+      ['Q',25],
+      ['D',10],
+      ['N',5],
+      ['P',1]
+    ]);
+
+    designations.forEach( (value, key, map) => {
+      
+      let n = (currency - currency % value) / value;      
+      if (n > 0) {
+        result[key] = n;
         currency = currency - n * value;
-        if (n > 0) {
-          result[key] = n;
-        }
       }
-    }
+      
+    } );
+
+    
+
+    return result;
 }
